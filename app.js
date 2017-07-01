@@ -18,7 +18,7 @@ const getTrackList = async (url) => {
         let link = $(this).attr('href')
         let track = (i + 1).toString()
 
-        if (track.length = 1) { track = `0${track}` }
+        if (track.length === 1) { track = `0${track}` }
 
         album.push({ title, link, track })
       })
