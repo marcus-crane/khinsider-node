@@ -20,6 +20,7 @@
     "caporal": "^0.7.0",
     "cheerio": "^1.0.0-rc.1",
     "disconnect": "^1.2.0",
-    "dotenv": "^4.0.0"
+    "dotenv": "^4.0.0",
+    "node-id3": "0.0.9"
   }
 }
