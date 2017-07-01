@@ -1,15 +1,23 @@
 {
   "name": "khinsider",
   "version": "1.0.0",
-  "description": "Node version of KHInsider",
-  "main": "app.js",
+  "preferGlobal": true,
+  "engines": {
+    "node": ">= 7.7.4"
+  },
+  "description": "Node version of khinsider.py",
+  "main": "khinsider.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node khinsider"
+  },
+  "bin": {
+    "nkh": "khinsider.js"
   },
   "author": "Marcus <marcus@thingsima.de>",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.16.2",
+    "caporal": "^0.7.0",
     "cheerio": "^1.0.0-rc.1"
   }
 }

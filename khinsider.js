@@ -1,21 +1,23 @@
+#!/usr/bin/env node
+
+const prog = require('caporal')
 const axios = require('axios')
 const cheerio = require('cheerio')
 const fs = require('fs')
 
-const saveDirectory = `${process.env['HOME']}/Downloads/${process.argv[2]}`
-
 const getTrackList = async (url) => {
-  let album = []
+  const saveDirectory = `${process.env['HOME']}/Downloads/${url}`
+  const album = []
   try {
-    const list = await axios.get(url)
+    const list = await axios.get(`https://downloads.khinsider.com/game-soundtracks/album/${url}`)
     const $ = cheerio.load(list.data)
     $('#EchoTopic table tbody td a')
       .not(function(i, elem) {
         return $(this).text() === 'Download'
       })
       .each(function(i, elem) {
-        let title = $(this).text()
-        let link = $(this).attr('href')
+        const title = $(this).text()
+        const link = $(this).attr('href')
         let track = (i + 1).toString()
 
         if (track.length === 1) { track = `0${track}` }
@@ -28,7 +30,7 @@ const getTrackList = async (url) => {
 
   fs.mkdirSync(saveDirectory)
 
-  handleDownload(album)
+  handleDownload(album, saveDirectory)
 }
 
 const fetchDownloadLink = async (url) => {
@@ -37,7 +39,7 @@ const fetchDownloadLink = async (url) => {
   return $('audio').attr('src')
 }
 
-const handleDownload = async (album) => {
+const handleDownload = async (album, saveDirectory) => {
   for (song of album) {
     try {
       console.log(`Downloading ${song.track}/${album.length} - ${song.title}...`)
@@ -50,8 +52,13 @@ const handleDownload = async (album) => {
   }
 }
 
-if (!process.argv[2]) {
-  return console.error('Enter a URL')
-}
+prog
+  .version('1.0.0')
 
-getTrackList('https://downloads.khinsider.com/game-soundtracks/album/' + process.argv[2])
+  .command('download', 'Download an OST from KHInsider')
+  .argument('<link>', 'The segment after /album/ in the OST URL')
+  .action((args, options) => {
+    getTrackList(args.link)
+  })
+
+prog.parse(process.argv)
