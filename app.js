@@ -31,20 +31,22 @@ const getTrackList = async (url) => {
   handleDownload(album)
 }
 
-const handleDownload = (album) => {
+const fetchDownloadLink = async (url) => {
+  const page = await axios.get(url)
+  const $ = cheerio.load(page.data)
+  return $('audio').attr('src')
+}
+
+const handleDownload = async (album) => {
   for (song of album) {
-    console.log(`Downloading ${song.track}/${album.length} - ${song.title}...`)
-    axios({
-      method: 'GET',
-      url: song.link,
-      responseType: 'stream'
-    })
-    .then((file) => {
+    try {
+      console.log(`Downloading ${song.track}/${album.length} - ${song.title}...`)
+      song.url = await fetchDownloadLink(song.link)
+      const file = await axios({ method: 'GET', url: song.url, responseType: 'stream' })
       file.data.pipe(fs.createWriteStream(`${saveDirectory}/${song.title}`))
-    })
-    .catch((err) => {
-      console.error(err)
-    })
+    } catch (e) {
+      console.error(e)
+    }
   }
 }
 
