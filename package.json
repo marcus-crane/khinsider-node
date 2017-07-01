@@ -1,0 +1,15 @@
+{
+  "name": "khinsider",
+  "version": "1.0.0",
+  "description": "Node version of KHInsider",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Marcus <marcus@thingsima.de>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "cheerio": "^1.0.0-rc.1"
+  }
+}
