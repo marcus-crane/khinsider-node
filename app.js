@@ -16,8 +16,11 @@ const getTrackList = async (url) => {
       .each(function(i, elem) {
         let title = $(this).text()
         let link = $(this).attr('href')
+        let track = (i + 1).toString()
 
-        album.push({ title, link })
+        if (track.length = 1) { track = `0${track}` }
+
+        album.push({ title, link, track })
       })
   } catch (e) {
     console.error(e)
@@ -25,24 +28,24 @@ const getTrackList = async (url) => {
 
   fs.mkdirSync(saveDirectory)
 
-  for (let song of album) {
-    handleDownload(song)
-  }
+  handleDownload(album)
 }
 
-const handleDownload = (track) => {
-  console.log(`Downloading ${track.title}...`)
-  axios({
-    method: 'GET',
-    url: track.link,
-    responseType: 'stream'
-  })
-  .then((file) => {
-    file.data.pipe(fs.createWriteStream(`${saveDirectory}/${track.title}`))
-  })
-  .catch((err) => {
-    console.error(err)
-  })
+const handleDownload = (album) => {
+  for (song of album) {
+    console.log(`Downloading ${song.track}/${album.length} - ${song.title}...`)
+    axios({
+      method: 'GET',
+      url: song.link,
+      responseType: 'stream'
+    })
+    .then((file) => {
+      file.data.pipe(fs.createWriteStream(`${saveDirectory}/${song.title}`))
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+  }
 }
 
 if (!process.argv[2]) {
