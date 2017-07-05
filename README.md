@@ -6,6 +6,7 @@ It's a little exercise in scraping plus I might add track renaming using the Dis
 
 # Usage
 
-```js
-node app.js bubblegum-crisis-tokyo-2040-01-original-soundtrack-1
-```
+    $ node --version
+    v7.7.4
+    $ npm install
+    $ node khinsider.js download bubblegum-crisis-tokyo-2040-01-original-soundtrack-1
